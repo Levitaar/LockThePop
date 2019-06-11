@@ -59,23 +59,28 @@ public class LockGameManager : MonoBehaviour
     
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.touchCount > 0)
         {
-            if(activeLevel)
+            if (Input.GetTouch(0).phase == TouchPhase.Began)
             {
-                KeyTap();
 
-            }
-            else
-            {
-                if(playerRotation < -0.5f || playerRotation > 0.5f)
+                if (activeLevel)
                 {
-                    RestartLevel();
+                    KeyTap();
 
                 }
                 else
                 {
-                    LevelStart();
+                    if (playerRotation < -0.5f || playerRotation > 0.5f)
+                    {
+                        RestartLevel();
+
+                    }
+                    else
+                    {
+                        LevelStart();
+                    }
+
                 }
 
             }
@@ -264,6 +269,14 @@ public class LockGameManager : MonoBehaviour
     {
         activeLevel = false;
 
+        FailAnimation();
+
+        print("failed");
+
+    }
+
+    void FailAnimation()
+    {
         float shaketime = 0.1f;
 
         LeanTween.cancel(playerBeatID);
@@ -273,7 +286,7 @@ public class LockGameManager : MonoBehaviour
             LeanTween.rotateZ(gameObject, 10, shaketime);
             LeanTween.delayedCall(shaketime, () =>
             {
-                LeanTween.rotateZ(gameObject,-10, shaketime);
+                LeanTween.rotateZ(gameObject, -10, shaketime);
                 LeanTween.delayedCall(shaketime, () =>
                 {
                     LeanTween.rotateZ(gameObject, 0, shaketime);
@@ -283,8 +296,6 @@ public class LockGameManager : MonoBehaviour
             });
 
         }).id;
-
-        print("failed");
 
     }
 
