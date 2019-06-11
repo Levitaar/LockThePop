@@ -36,9 +36,14 @@ public class LockGameManager : MonoBehaviour
     [SerializeField]
     bool activeLevel;
 
+    [SerializeField]
+    bool levelReady;
+
     void Awake()
     {
         SetInitialBeatPosition();
+
+        RestartLevel();
 
         activeLevel = false;
 
@@ -55,7 +60,7 @@ public class LockGameManager : MonoBehaviour
             }
             else
             {
-                if(playerRotation != 0)
+                if(playerRotation < -0.5f || playerRotation > 0.5f)
                 {
                     RestartLevel();
 
@@ -69,8 +74,6 @@ public class LockGameManager : MonoBehaviour
 
         }
 
-        
-
     }
 
     void LevelStart()
@@ -79,8 +82,6 @@ public class LockGameManager : MonoBehaviour
 
         KeyMovement();
 
-
-
     }
 
     void KeyMovement()
@@ -88,24 +89,35 @@ public class LockGameManager : MonoBehaviour
 
         //the added 10 is so it moves past the beat
 
+        float lerpedValue = playerRotation;
+
         if (clockwiseRot)
         {
-            playerBeatID = LeanTween.rotateZ(playerKey, beatRotation + 20, gameSpeed).id;
-
-            
+            playerBeatID = LeanTween.value(lerpedValue, beatRotation - 20, gameSpeed).setOnUpdate(KeyUpdate).setOnComplete(FailState).setEaseLinear().id;
 
         }
         else
         {
-            playerBeatID = LeanTween.rotateZ(playerKey, beatRotation - 20, gameSpeed).id;
+            playerBeatID = LeanTween.value(lerpedValue, beatRotation + 20, gameSpeed).setOnUpdate(KeyUpdate).setOnComplete(FailState).setEaseLinear().id;
 
         }
+
+        playerKey.transform.eulerAngles = new Vector3(0, 0, playerRotation);
+
+    }
+
+    void KeyUpdate(float newVal)
+    {
+        playerRotation = newVal;
+
+        playerKey.transform.eulerAngles = new Vector3(0, 0, playerRotation);
 
     }
 
     void KeyTap()
     {
-        playerRotation = playerKey.transform.eulerAngles.z;
+
+        RotationCheck();
 
         if (playerRotation > beatRotation - marginOfError && beatRotation + marginOfError > playerRotation)
         {
@@ -134,85 +146,101 @@ public class LockGameManager : MonoBehaviour
 
     void RotationCheck()
     {
-        playerRotation = playerKey.transform.eulerAngles.z;
 
-        if(beat.transform.eulerAngles.z > 360)
+        if(beatRotation > 180)
         {
-            beat.transform.eulerAngles = new Vector3(beat.transform.eulerAngles.x, beat.transform.eulerAngles.y, beat.transform.eulerAngles.z - 360);
-
-            beatRotation = beat.transform.eulerAngles.z;
+            beatRotation = beatRotation - 180;
 
         }
 
-        if (beat.transform.eulerAngles.z < 360)
+        if (beatRotation < -180)
         {
-            beat.transform.eulerAngles = new Vector3(beat.transform.eulerAngles.x, beat.transform.eulerAngles.y, beat.transform.eulerAngles.z + 360);
-
-            beatRotation = beat.transform.eulerAngles.z;
+            beatRotation = beatRotation + 180;
 
         }
 
-        if (playerKey.transform.eulerAngles.z > 360)
+        if (playerRotation > 180)
         {
-            playerKey.transform.eulerAngles = new Vector3(playerKey.transform.eulerAngles.x, playerKey.transform.eulerAngles.y, playerKey.transform.eulerAngles.z - 360);
-
-            playerRotation = playerKey.transform.eulerAngles.z;
+            playerRotation = playerRotation - 180;
 
         }
 
-        if (playerKey.transform.eulerAngles.z < 360)
+        if (playerRotation < -180)
         {
-            playerKey.transform.eulerAngles = new Vector3(playerKey.transform.eulerAngles.x, playerKey.transform.eulerAngles.y, playerKey.transform.eulerAngles.z + 360);
-
-            playerRotation = playerKey.transform.eulerAngles.z;
+            playerRotation = playerRotation + 180;
 
         }
+
+        beat.transform.eulerAngles = new Vector3(0, 0, beatRotation);
+
+        playerKey.transform.eulerAngles = new Vector3(0, 0, playerRotation);
 
     }
 
     void SetInitialBeatPosition()
     {
+
+        beatRotation = 0;
+
         int rng = Random.Range(0, 100);
 
-        if(rng < 50)
+        int newRotation = Random.Range(minBeatPositionChange, maxBeatPositionChange);
+
+        if (rng < 50)
         {
             clockwiseRot = true;
+
+            beatRotation = -newRotation;
 
         }
         else
         {
             clockwiseRot = false;
 
+            beatRotation = newRotation;
+
         }
 
-        NextBeatPosition();
+        beat.transform.eulerAngles = new Vector3(0, 0, beatRotation);
 
     }
 
     void NextBeatPosition()
     {
+
         int newRotation = Random.Range(minBeatPositionChange, maxBeatPositionChange);
 
         if (clockwiseRot)
         {
-            beatRotation = beat.transform.eulerAngles.z + newRotation;
+            clockwiseRot = false;
 
         }
         else
         {
-            beatRotation = beat.transform.eulerAngles.z - newRotation;
+            clockwiseRot = true;
 
         }
 
-        LeanTween.rotateZ(beat, beatRotation, 0);
+        if (clockwiseRot)
+        {
+            beatRotation = beat.transform.eulerAngles.z - newRotation;
+
+        }
+        else
+        {
+            beatRotation = beat.transform.eulerAngles.z + newRotation;
+
+        }
+
+        beat.transform.eulerAngles = new Vector3(0, 0, beatRotation);
 
     }
 
     void RestartLevel()
     {
-        LeanTween.rotateZ(playerKey, 0, 0);
-
         playerRotation = 0;
+
+        playerKey.transform.eulerAngles = new Vector3(0, 0, playerRotation);
 
         SetInitialBeatPosition();
 
@@ -222,7 +250,25 @@ public class LockGameManager : MonoBehaviour
     {
         activeLevel = false;
 
+        float shaketime = 0.1f;
+
         LeanTween.cancel(playerBeatID);
+
+        int id = LeanTween.delayedCall(0, () =>
+        {
+            LeanTween.rotateZ(gameObject, 10, shaketime);
+            LeanTween.delayedCall(shaketime, () =>
+            {
+                LeanTween.rotateZ(gameObject,-10, shaketime);
+                LeanTween.delayedCall(shaketime, () =>
+                {
+                    LeanTween.rotateZ(gameObject, 0, shaketime);
+
+                });
+
+            });
+
+        }).id;
 
         print("failed");
 

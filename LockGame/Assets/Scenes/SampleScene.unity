@@ -245,7 +245,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: a62391a229e1c4448ae62669e730b6b2, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -324,7 +324,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: c8a536497d2d8734f9558f0eb864e8e5, type: 3}
   m_Color: {r: 1, g: 0.6807325, b: 0, a: 1}
   m_FlipX: 0
@@ -441,14 +441,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 647715089}
-  m_LocalRotation: {x: -0, y: -0, z: -0.6087605, w: 0.79335415}
-  m_LocalPosition: {x: 0, y: -1.49, z: -1.53}
+  m_LocalRotation: {x: 0, y: -0, z: 0.25881916, w: -0.9659258}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 241866165}
   m_Father: {fileID: 1382586686}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -75}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 330}
 --- !u!1 &654942406
 GameObject:
   m_ObjectHideFlags: 0
@@ -461,7 +461,7 @@ GameObject:
   - component: {fileID: 654942409}
   - component: {fileID: 654942408}
   m_Layer: 0
-  m_Name: TextMeshPro Text
+  m_Name: LevelText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -622,7 +622,7 @@ GameObject:
   - component: {fileID: 1180715285}
   - component: {fileID: 1180715284}
   m_Layer: 0
-  m_Name: TextMeshPro Text (1)
+  m_Name: BeatCounter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -796,11 +796,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1382586685}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.47, z: 0}
   m_LocalScale: {x: 0.32591388, y: 0.32591388, z: 0.32591388}
   m_Children:
-  - {fileID: 1405235854}
   - {fileID: 647715090}
+  - {fileID: 1405235854}
   - {fileID: 2056429945}
   - {fileID: 1801128825}
   m_Father: {fileID: 0}
@@ -821,15 +821,16 @@ MonoBehaviour:
   playerKey: {fileID: 1405235853}
   beat: {fileID: 647715089}
   lockLevel: 1
-  gameSpeed: 3
+  gameSpeed: 2
   beatsLeft: 10
-  clockwiseRot: 1
-  minBeatPositionChange: 25
-  maxBeatPositionChange: 80
+  clockwiseRot: 0
+  minBeatPositionChange: 35
+  maxBeatPositionChange: 120
   beatRotation: 0
   playerRotation: 0
   marginOfError: 20
   activeLevel: 0
+  levelReady: 0
 --- !u!1 &1405235853
 GameObject:
   m_ObjectHideFlags: 0
@@ -854,12 +855,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1405235853}
   m_LocalRotation: {x: -0, y: -0, z: -0.00000037252897, w: 1}
-  m_LocalPosition: {x: -0, y: -1.49, z: -3.06}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 191174890}
   m_Father: {fileID: 1382586686}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1801128824
 GameObject:
@@ -886,7 +887,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1801128824}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 4.66, z: 1.53}
+  m_LocalPosition: {x: 0, y: 6.21, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1382586686}
@@ -965,7 +966,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2056429944}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.49, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1382586686}
@@ -1007,7 +1008,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 76589116d354d1e41ad83b31dcdbd582, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -1030,6 +1031,7 @@ GameObject:
   - component: {fileID: 2123465992}
   - component: {fileID: 2123465991}
   - component: {fileID: 2123465990}
+  - component: {fileID: 2123465993}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -1096,3 +1098,15 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &2123465993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2123465989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90be3340d203151459bf63e6dd2b6eb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
