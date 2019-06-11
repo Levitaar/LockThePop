@@ -183,8 +183,7 @@ public class LockGameManager : MonoBehaviour
 
     void KeyTap()
     {
-
-        RotationCheck();
+        //RotationCheck();
 
         if (playerRotation > beatRotation - marginOfError && beatRotation + marginOfError > playerRotation)
         {

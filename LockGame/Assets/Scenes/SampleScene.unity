@@ -662,7 +662,7 @@ MonoBehaviour:
   beat: {fileID: 647715089}
   lockPiece: {fileID: 1801128824}
   lockLevel: 1
-  gameSpeed: 2
+  gameSpeed: 0.001
   beatsLeft: 1
   clockwiseRot: 0
   minBeatPositionChange: 35
