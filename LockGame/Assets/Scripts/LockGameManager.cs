@@ -8,13 +8,15 @@ public class LockGameManager : MonoBehaviour
     GameObject playerKey;
     [SerializeField]
     GameObject beat;
+    [SerializeField]
+    GameObject lockPiece;
 
     [SerializeField]
-    int lockLevel = 1;
+    public int lockLevel = 1;
     [SerializeField]
     float gameSpeed = 0.05f;
     [SerializeField]
-    int beatsLeft = 1;
+    public int beatsLeft = 1;
     [SerializeField]
     bool clockwiseRot = true;
 
@@ -42,6 +44,12 @@ public class LockGameManager : MonoBehaviour
     void Awake()
     {
         SetInitialBeatPosition();
+
+        lockLevel = 1;
+
+        gameSpeed = 2.5f;
+
+        beatsLeft = lockLevel;
 
         RestartLevel();
 
@@ -79,6 +87,8 @@ public class LockGameManager : MonoBehaviour
     void LevelStart()
     {
         activeLevel = true;
+
+        beatsLeft = lockLevel;
 
         KeyMovement();
 
@@ -123,10 +133,12 @@ public class LockGameManager : MonoBehaviour
         {
             LeanTween.cancel(playerBeatID);
 
-            if (beatsLeft > 0)
+            if (beatsLeft > 1)
             {
                 NextBeatPosition();
                 KeyMovement();
+
+                beatsLeft--;
 
             }
             else
@@ -240,6 +252,8 @@ public class LockGameManager : MonoBehaviour
     {
         playerRotation = 0;
 
+        beatsLeft = lockLevel;
+
         playerKey.transform.eulerAngles = new Vector3(0, 0, playerRotation);
 
         SetInitialBeatPosition();
@@ -279,6 +293,55 @@ public class LockGameManager : MonoBehaviour
         activeLevel = false;
 
         print("level complete");
+
+        lockLevel++;
+
+        gameSpeed = gameSpeed - 0.1f;
+
+        VictoryAnimation();
+
+    }
+
+    void VictoryAnimation()
+    {
+        float newLockPieceY = 9;
+
+        float moveLockPiece = 0.35f;
+
+        float newLockX = 5;
+
+        float moveLock = 0.6f;
+
+        float originLockX = 0;
+
+        float resetLock = 0.6f;
+
+        int id = LeanTween.delayedCall(0, () =>
+        {
+            LeanTween.moveLocalY(lockPiece, newLockPieceY, moveLockPiece).setEaseOutExpo();
+            LeanTween.delayedCall(moveLockPiece, () =>
+            {
+                LeanTween.moveX(gameObject, newLockX, moveLock).setEaseOutExpo();
+                LeanTween.delayedCall(moveLock, () =>
+                {
+
+                    gameObject.transform.position = new Vector3(newLockX * -1, gameObject.transform.position.y, 0);
+
+                    RestartLevel();
+
+                    LeanTween.moveLocalY(lockPiece, 6, 0);
+
+                    LeanTween.delayedCall(moveLock, () =>
+                    {
+                        LeanTween.moveX(gameObject, originLockX, resetLock).setEaseOutExpo();
+
+                    });
+
+                });
+
+            });
+
+        }).id;
 
     }
 

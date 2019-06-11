@@ -6,7 +6,16 @@ using TMPro;
 public class CanvasController : MonoBehaviour
 {
     [SerializeField]
-    TextMeshPro LevelText;
+    TextMeshProUGUI LevelText;
     [SerializeField]
     TextMeshPro BeatCounter;
+    [SerializeField]
+    LockGameManager manager;
+
+    void Update()
+    {
+        BeatCounter.text = manager.beatsLeft.ToString();
+
+        LevelText.text = "Level: " + manager.lockLevel.ToString();
+    }
 }
