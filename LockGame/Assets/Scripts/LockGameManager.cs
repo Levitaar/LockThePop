@@ -41,9 +41,21 @@ public class LockGameManager : MonoBehaviour
     [SerializeField]
     bool levelReady;
 
+    [SerializeField]
+    CanvasController canvCon;
+
+    Color mainBG;
+
+    public Color failureBG;
+
+    [SerializeField]
+    bool testing;
+
     void Awake()
     {
         SetInitialBeatPosition();
+
+        mainBG = canvCon.cam.backgroundColor;
 
         lockLevel = 1;
 
@@ -59,9 +71,49 @@ public class LockGameManager : MonoBehaviour
     
     void Update()
     {
-        if (Input.touchCount > 0)
+        InputManager();
+
+        CanvasManager();
+
+    }
+
+    void InputManager()
+    {
+        if (!testing)
         {
-            if (Input.GetTouch(0).phase == TouchPhase.Began)
+
+            if (Input.touchCount > 0)
+            {
+                if (Input.GetTouch(0).phase == TouchPhase.Began)
+                {
+
+                    if (activeLevel)
+                    {
+                        KeyTap();
+
+                    }
+                    else
+                    {
+                        if (playerRotation < -0.5f || playerRotation > 0.5f)
+                        {
+                            RestartLevel();
+
+                        }
+                        else
+                        {
+                            LevelStart();
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
             {
 
                 if (activeLevel)
@@ -257,6 +309,8 @@ public class LockGameManager : MonoBehaviour
     {
         playerRotation = 0;
 
+        canvCon.cam.backgroundColor = mainBG;
+
         beatsLeft = lockLevel;
 
         playerKey.transform.eulerAngles = new Vector3(0, 0, playerRotation);
@@ -268,6 +322,8 @@ public class LockGameManager : MonoBehaviour
     void FailState()
     {
         activeLevel = false;
+
+        canvCon.cam.backgroundColor = failureBG;
 
         FailAnimation();
 
@@ -353,6 +409,14 @@ public class LockGameManager : MonoBehaviour
             });
 
         }).id;
+
+    }
+
+    void CanvasManager()
+    {
+        canvCon.BeatCounter.text = beatsLeft.ToString();
+
+        canvCon.LevelText.text = "Level: " + lockLevel.ToString();
 
     }
 
