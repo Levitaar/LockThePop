@@ -674,7 +674,7 @@ MonoBehaviour:
   levelReady: 0
   canvCon: {fileID: 2123465993}
   failureBG: {r: 0.84313726, g: 0.25882354, b: 0.22745098, a: 0}
-  testing: 1
+  testing: 0
 --- !u!1 &1405235853
 GameObject:
   m_ObjectHideFlags: 0
